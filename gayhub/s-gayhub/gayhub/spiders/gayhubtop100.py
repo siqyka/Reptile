@@ -48,8 +48,6 @@ class Gayhubtop100Spider(Spider):
             'type':'Repositories'
         }
         pages=self.settings.get('MAX_ITEMS')//10+1   #计算抓取几页
-        if pages==1:
-            pages=2
         base_url='https://github.com/search?'
         for page in range(1,pages):
             data['p']=page
