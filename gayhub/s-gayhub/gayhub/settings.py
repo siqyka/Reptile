@@ -94,4 +94,6 @@ MONGO_DB='gayhub'
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 #设置抓取几项，后续会根据这边来计算需要抓取几页
-MAX_ITEMS=10
+MAX_ITEMS=100
+#设置搜索关键字
+KEYWORD='python'

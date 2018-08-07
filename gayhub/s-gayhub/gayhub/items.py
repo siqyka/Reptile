@@ -7,10 +7,11 @@
 
 import scrapy
 
-#抓取的信息有  项目名称、项目链接、项目简介、项目的tag、项目的主语言、项目的stars数
+#抓取的信息有  项目所属页数、项目名称、项目链接、项目简介、项目的tag、项目的主语言、项目的stars数
 class GayhubItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    ranking=scrapy.Field()
     name=scrapy.Field()
     link=scrapy.Field()
     synopsis=scrapy.Field()
