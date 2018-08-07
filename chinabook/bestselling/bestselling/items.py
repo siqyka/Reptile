@@ -12,6 +12,7 @@ class BestsellingItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     bookname=scrapy.Field()
+    bookurl=scrapy.Field()
     author=scrapy.Field()
     publisher=scrapy.Field()
     sellprice=scrapy.Field()

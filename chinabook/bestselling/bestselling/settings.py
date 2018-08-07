@@ -52,9 +52,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'bestselling.middlewares.BestsellingDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'bestselling.middlewares.SeleniumMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -93,3 +93,7 @@ ROBOTSTXT_OBEY = False
 MAX_ITEM=100
 #选择爬取哪个畅销榜，选项有"1","2","3","7","30"
 CHOICE="30"
+#设置请求超时时间20s
+SELRNIUM_TIMEOUT=20
+#设置写入文件编码格式
+FEED_EXPORT_ENCODING = 'utf-8'
