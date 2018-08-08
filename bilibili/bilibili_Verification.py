@@ -16,21 +16,25 @@ upwd=''
 filepath=''
 
 class bilibili():
-    def __init__(self):
-        self.url='https://passport.bilibili.com/login'
-        self.bro=webdriver.Firefox()
+    def __init__(self,url,bro,timeout=10):
+        self.url=url
+        # self.uname=uname
+        # self.upwd=upwd
+        self.timeout = timeout
+        self.bro=bro
         # self.bro=webdriver.Chrome() #chromed B站验站好像比较精确，失败挺多
-        self.wait=WebDriverWait(self.bro,10)
-        self.uname=uname
-        self.upwd=upwd
+        self.wait=WebDriverWait(self.bro,self.timeout)
+        
+
+    def webbro(self):
         self.bro.get(self.url)
-    
+        
     #输入账号密码
-    def input_msg(self):
+    def input_msg(self,uname,upwd):
         name=self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,'#login-username')))
         pwd=self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,'#login-passwd')))
-        name.send_keys(self.uname)
-        pwd.send_keys(self.upwd)
+        name.send_keys(uname)
+        pwd.send_keys(upwd)
         
     #获取验证图的左上角和右下角坐标（由于b站验证图悬浮于原网页上，所以使用特殊手段
     # （通过原网页一些元素推出）得到图片坐标）
@@ -40,7 +44,7 @@ class bilibili():
         time.sleep(2)
         location1=self.name.location
         location2=self.pwd.location
-        size1=self.name.size
+        # size1=self.name.size
         size2=self.pwd.size
         top,bottom,left,right=location1['y'],location2['y']+size2['height'],location1['x'],location2['x']+size2['width']
         return(top-20,bottom,left-20,right-130)
@@ -86,8 +90,8 @@ class bilibili():
     
     #3获取缺口位置到滑块的偏移量
     def same_image(self):
-        threshold = 0.95# 相似度阈值
-        count = 0
+        # threshold = 0.95# 相似度阈值
+        # count = 0
         dif=[]
         fdif=[]
         # imagename1='captcha.png'
@@ -149,8 +153,12 @@ class bilibili():
 
 
 def main():
-    a=bilibili()
-    a.input_msg()
+    url='https://passport.bilibili.com/login'
+    bro=webdriver.Firefox()
+    
+    a=bilibili(url=url,bro=bro)
+    a.webbro()
+    a.input_msg(uname,upwd)
     a.get_jyimage()
     a.get_q_jyimage()
     a.move()

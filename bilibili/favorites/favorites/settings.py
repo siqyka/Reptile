@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for bestselling project
+# Scrapy settings for favorites project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,10 +9,10 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'bestselling'
+BOT_NAME = 'favorites'
 
-SPIDER_MODULES = ['bestselling.spiders']
-NEWSPIDER_MODULE = 'bestselling.spiders'
+SPIDER_MODULES = ['favorites.spiders']
+NEWSPIDER_MODULE = 'favorites.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -47,13 +47,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'bestselling.middlewares.BestsellingSpiderMiddleware': 543,
+#    'favorites.middlewares.FavoritesSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'bestselling.middlewares.SeleniumMiddleware': 543,
+   'favorites.middlewares.SeleniumMiddleware': 543,
 }
 
 # Enable or disable extensions
@@ -65,7 +65,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'bestselling.pipelines.BestsellingPipeline': 300,
+#    'favorites.pipelines.FavoritesPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -89,11 +89,9 @@ DOWNLOADER_MIDDLEWARES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-#最多爬取多少畅销榜的书
-MAX_ITEM=100
-#选择爬取哪个畅销榜，选项有"1","2","3","7","30"
-CHOICE="30"
-#设置请求超时时间20s
-SELRNIUM_TIMEOUT=20
+#设置请求超时时间30s
+SELRNIUM_TIMEOUT=30
 #设置写入文件编码格式
 FEED_EXPORT_ENCODING = 'utf-8'
+
+URL='https://passport.bilibili.com/login'
