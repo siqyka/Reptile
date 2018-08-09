@@ -29,5 +29,5 @@ class MyfavoritesSpider(scrapy.Spider):
 
     def start_requests(self):
         for item in range(20):
-            url='https://space.bilibili.com/4912884/#/favlist'
+            url='https://space.bilibili.com/%s/#/favlist'%123456   #输入uid
             yield scrapy.Request(url=url,callback=self.parse,meta={'item':item},dont_filter=True)
