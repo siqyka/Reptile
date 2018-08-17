@@ -14,6 +14,16 @@ class SaveToDatabase():
         self.password=password
         self.db=db
         self.charset=charset
+        self.linkdb()
+
+
+    def linkdb(self):
+        if self.type=='mysql':
+            self.connect = pymysql.Connect(host=self.host,port=self.port,
+                user=self.username,passwd=self.password,
+                db=self.db,charset=self.charset
+                )
+            self.cursor = self.connect.cursor()
 
     def set(self):
         pass
