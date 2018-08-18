@@ -1,21 +1,7 @@
 from pyquery import PyQuery as pq
 import requests
 from config import *
-
-
-class GetProxy():
-    def __init__(self):
-        self.arr=[]
-
-    def getproxy(self,url):
-        raise NotImplementedError
-
-    def run(self):
-        for url in WEBSITE:
-            self.getproxy(url)
-        return self.arr
-
-    
+from getproxy import *
 
 class XCGetProxy(GetProxy):
     def __init__(self):
@@ -36,12 +22,3 @@ class XCGetProxy(GetProxy):
             }
             # iproxy=[item('td:nth-child(2)').text()+":"+item('td:nth-child(3)').text()]
             self.arr.append(iproxy)
-        
-
-    
-
-if __name__ == '__main__':
-    b=XCGetProxy().run()
-    print(len(b))
-    # for i in b:
-    #     print(i)
