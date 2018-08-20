@@ -7,7 +7,7 @@ HEADERS={
 
 #需要爬取代理的网页
 WEBSITE=[]
-for offset in range(1,3):
+for offset in range(1,2):
         url='http://www.xicidaili.com/nn/'+str(offset)
         WEBSITE.append(url)
 
@@ -16,17 +16,22 @@ for offset in range(1,3):
 
 #数据库的信息
 DBMESSAGE={
+        'dbtype':'mysql',       #数据库类型：mysql,redis,mango三选一，建议使用redis
         'host':'localhost',
         'port':3306,
-        'username':'',
-        'password':'',
-        'db':'db',
+        'username':'root',
+        'password':'tarena',
+        'db':'db',              #mysql,mango中使用
         'table':'test',
         'charset':'utf8'
 }
 
-#创建表所需的字段(需和代理爬取字段相同)
-TABLE=['ip','porxy','type']
+#创建表所需的字段,不可更改(需和代理爬取字段相同，单Redis只会使用ip和port)
+TABLE=['ip','port']
+
+#数据库选择redis时的db和集合键名
+REDIS_DB=0                 
+REDIS_KEY='proxies'
 
 
 #detect.py
@@ -45,7 +50,7 @@ BATCH_TEST_SIZE=10
 
 #重写getproxy方法的文件名和类名
 OVERRIDE_MODULE={
-        'MODULENAME':'test',
+        'MODULENAME':'voerrideget',
         'CLASSNAME':'XCGetProxy'
 }
 

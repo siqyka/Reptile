@@ -1,4 +1,3 @@
-# from getproxy import *
 from config import *
 import pymongo
 import pymysql
@@ -6,7 +5,7 @@ import redis
 import random
 
 class SaveToDatabase():
-    def __init__(self,type='mysql', host=DBMESSAGE['host'], port=DBMESSAGE['port'], username=DBMESSAGE['username'] ,
+    def __init__(self,type=DBMESSAGE['dbtype'], host=DBMESSAGE['host'], port=DBMESSAGE['port'], username=DBMESSAGE['username'] ,
                 password=DBMESSAGE['password'],db=DBMESSAGE['db'],table=DBMESSAGE['table'],
                 charset=DBMESSAGE['charset']):
         self.type=type
@@ -15,17 +14,16 @@ class SaveToDatabase():
         self.username=username
         self.password=password
         self.db=db
+        if type=='redis':
+            self.db=REDIS_DB
         self.charset=charset
         self.table=table
         self.linkdb()
 
-
+    #连接数据库
     def linkdb(self):
         if self.type=='mysql':
-            sql="create table if not exists {0}(id int not null auto_increment primary key,{1} \
-                varchar(40),{2} varchar(40)),{3} varchar(40)".format(self.table,TABLE[0],
-                TABLE[1],TABLE[2]
-                )
+            sql="create table if not exists {0}(id int not null auto_increment primary key,{1} varchar(40),{2} varchar(40),unique ({3}))".format(self.table,TABLE[0],TABLE[1],TABLE[0])
             try:
                 self.connect = pymysql.Connect(host=self.host,port=self.port,
                     user=self.username,passwd=self.password,
@@ -35,7 +33,7 @@ class SaveToDatabase():
                 try:
                     self.cursor.execute(sql)
                     self.connect.commit()
-                except:
+                except :
                     self.connect.rollback()
             except:
                 self.connect = pymysql.Connect(host=self.host,port=self.port,
@@ -57,42 +55,53 @@ class SaveToDatabase():
             self.db = client[self.db]
 
         elif self.type=='redis':
-            self.redis = redis.StrictRedis(host=self.host, port=self.port, db=self.db)
+            self.redis = redis.StrictRedis()
 
+    #插入数据
     def set(self,data):
         if self.type=='mysql':
             keys=",".join(data.keys())
-            values=",".join(["%"]*len(data))
-            sql="inster into {table} ({keys}) values({values})".format(table=self.table,keys=keys,values=values)
+            values=",".join(['%s']*len(data))
+            sql="insert into {table} ({keys}) values({values})".format(table=self.table,keys=keys,values=values)    
             try:
                 if self.cursor.execute(sql,tuple(data.values())):
-                    print('inster success')
+                    print('insert success')
                     self.connect.commit()
             except:
-                print("inster failed")
+                print("insert failed")
                 self.connect.rollback()
 
         elif self.type=='mango':
             pass
 
         elif self.type=='redis':
-            pass
+            proxy=data['ip']+':'+data['port']
+            self.redis.zadd(REDIS_KEY, 100, proxy)
+            print("insert success")
 
+    #删除数据
     def delete(self,ip):
         if self.type=='mysql':
-            sql="delete from {0} where ip={1}".format(self.table,ip)
+            ips=ip.split(":")
+            sql="delete from {0} where ip='{1}'".format(self.table,ips[0])
+            print(sql)
             try:
                 self.cursor.execute(sql)
+                self.connect.commit()
+                print('ok')
                 return True
             except:
+                self.connect.rollback()
                 return False
 
         elif self.type=='mango':
             pass
 
         elif self.type=='redis':
-            pass
+            self.redis.zrem(REDIS_KEY, ip)
+            print('ok')
     
+    #获得所用数据
     def all(self):
         if self.type=='mysql':
             sql="select * from {0}".format(self.table)
@@ -107,7 +116,7 @@ class SaveToDatabase():
             pass
 
         elif self.type=='redis':
-            pass
+            return self.redis.zrange(REDIS_KEY,0,-1)
 
     def count(self):
         if self.type=='mysql':
@@ -123,8 +132,9 @@ class SaveToDatabase():
             pass
 
         elif self.type=='redis':
-            pass
+            return self.redis.zcard(REDIS_KEY)
 
+    #随机返回一个代理
     def random(self):
         if self.type=='mysql':
             sql1="select count(*) from {0}".format(self.table)
@@ -132,9 +142,11 @@ class SaveToDatabase():
                 self.cursor.execute(sql1)
                 result = self.cursor.fetchall()[0][0]
                 id=random.randint(1,result)
-                sql2="select ip,port from {0} where id={1}".format(self.table,id)
-                proxy=self.cursor.fetchone()
-                return proxy
+                sql2="select ip,port from {0}".format(self.table)
+                self.cursor.execute(sql2)
+                proxy=self.cursor.fetchall()
+                rproxy=proxy[id][0]+":"+proxy[id][1]
+                return rproxy
             except:
                 return "error"
 
@@ -142,12 +154,14 @@ class SaveToDatabase():
             pass
 
         elif self.type=='redis':
-            pass
+            result=self.redis.zrange(REDIS_KEY,0,-1)
+            return random.choice(result)
 
+    #批量返回代理
     def batch(self, count, start, stop=0):
         if self.type=='mysql':
             proxyl=[]
-            sql1="select ip,port from {0} limit{1},{2}".format(self.table,start,count)
+            sql1="select ip,port from {0} limit {1},{2}".format(self.table,start,count)
             try:
                 self.cursor.execute(sql1)
                 proxys=self.cursor.fetchall()
@@ -161,8 +175,7 @@ class SaveToDatabase():
             pass
 
         elif self.type=='redis':
-            pass
-        return self.db.zrevrange(REDIS_KEY, start, stop - 1)
+            return self.redis.zrevrange(REDIS_KEY, start, stop - 1)
 
 
 if __name__ == '__main__':

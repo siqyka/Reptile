@@ -18,7 +18,6 @@ class XCGetProxy(GetProxy):
             iproxy={
                 "ip":item('td:nth-child(2)').text(),
                 "port":item('td:nth-child(3)').text(),
-                "type":item('td:nth-child(5)').text()
             }
             # iproxy=[item('td:nth-child(2)').text()+":"+item('td:nth-child(3)').text()]
             self.arr.append(iproxy)

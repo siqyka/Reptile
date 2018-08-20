@@ -9,12 +9,12 @@ except:
 from db import SaveToDatabase
 from config import *
 
-
+#异步测试代理是否可用程序
 class Detect(object):
     def __init__(self):
         self.dbmysql=SaveToDatabase()
 
-    async def test_single_proxy(proxy):
+    async def test_single_proxy(self,proxy):
         conn = aiohttp.TCPConnector(verify_ssl=False)
         async with aiohttp.ClientSession(connector=conn) as session:
             try:
@@ -26,12 +26,11 @@ class Detect(object):
                     if response.status in VALID_STATUS_CODES:
                         print('代理可用', proxy)
                     else:
-                        ips=proxy.split(":")
-                        self.dbmysql.delete(ips[0])
+                        
+                        self.dbmysql.delete(proxy)
                         print('请求响应码不合法 ', response.status, 'IP', proxy)
             except (ClientError, aiohttp.client_exceptions.ClientConnectorError, asyncio.TimeoutError, AttributeError):
-                ips=proxy.split(":")
-                self.dbmysql.delete(ips[0])
+                self.dbmysql.delete(proxy)
                 print('代理请求失败', proxy)
 
 
@@ -41,9 +40,9 @@ class Detect(object):
             for i in range(0, count, BATCH_TEST_SIZE):
                 start = i
                 stop = min(i + BATCH_TEST_SIZE, count)
-                test_proxies = self.dbmysql.batch(BATCH_TEST_SIZE, start)
+                test_proxies = self.dbmysql.batch(BATCH_TEST_SIZE, start,stop)
                 loop = asyncio.get_event_loop()
-                tasks = [test_single_proxy(proxy) for proxy in test_proxies]
+                tasks = [self.test_single_proxy(proxy) for proxy in test_proxies]
                 loop.run_until_complete(asyncio.wait(tasks))
                 sys.stdout.flush()
                 time.sleep(5)
