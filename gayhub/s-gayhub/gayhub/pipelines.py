@@ -21,7 +21,7 @@ class MongoPipeline(object):
 
     def open_spider(self,spider):
         self.client=pymongo.MongoClient(self.mongo_url)
-        self.db=self.db=self.client[self.mongo_db]
+        self.db=self.client[self.mongo_db]
 
     def process_item(self,item,spider):
         name=item.__class__.__name__
