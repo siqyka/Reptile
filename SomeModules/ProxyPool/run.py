@@ -10,9 +10,9 @@ def run():
     class1=eval(str1)
     lproxy = class1.run()
 
-    db=SaveToDatabase()
-    for data in lproxy:
-        db.set(data)
+    # db=SaveToDatabase()
+    # for data in lproxy:
+    #     db.set(data)
 
     detect=Detect()
     detect.run()

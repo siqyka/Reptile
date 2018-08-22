@@ -20,7 +20,7 @@ DBMESSAGE={
         'host':'localhost',
         'port':3306,
         'username':'root',
-        'password':'tarena',
+        'password':'',
         'db':'db',              #mysql,mango中使用
         'table':'test',
         'charset':'utf8'

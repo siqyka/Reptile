@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for LaGou project
+# Scrapy settings for Renthouse project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,17 +9,17 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'LaGou'
+BOT_NAME = 'Renthouse'
 
-SPIDER_MODULES = ['LaGou.spiders']
-NEWSPIDER_MODULE = 'LaGou.spiders'
+SPIDER_MODULES = ['Renthouse.spiders']
+NEWSPIDER_MODULE = 'Renthouse.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36'
+#USER_AGENT = 'Renthouse (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -47,13 +47,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'favorites.middlewares.FavoritesSpiderMiddleware': 543,
+#    'Renthouse.middlewares.RenthouseSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'LaGou.middlewares.SeleniumMiddleware': 543,
+   'Renthouse.middlewares.ProxiesSpiderMiddleware': 543,
 }
 
 # Enable or disable extensions
@@ -64,9 +64,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'LaGou.pipelines.LagouPipeline': 300,
-}
+#ITEM_PIPELINES = {
+#    'Renthouse.pipelines.RenthousePipeline': 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -89,21 +89,11 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
+USER_AGENT = 'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36'
+
 FEED_EXPORT_ENCODING = 'utf-8'
 
-#查找关键词和工作地点
-KEY='python'
-CITY=''
-
-#抓取多少页
-MAX_PAGE=3
-
-#等待时间
-SELRNIUM_TIMEOUT=30
-
-#mysql数据库信息
-MYSQL_HOST='localhost'
-MYSQL_DATABASE='lagou'
-MYSQL_PROT=3306
-MYSQL_USER='root'
-MYSQL_PASSWOED=''
+MAX_PAGE=2
+AREA=''
+MIN_MONEY=2000
+MAX_MONEY=3000
