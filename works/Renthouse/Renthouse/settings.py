@@ -64,9 +64,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'Renthouse.pipelines.RenthousePipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'Renthouse.pipelines.RenHousePipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -97,3 +97,11 @@ MAX_PAGE=2
 AREA=''
 MIN_MONEY=2000
 MAX_MONEY=3000
+
+
+
+MYSQL_HOST='localhost'
+MYSQL_DATABASE='work'
+MYSQL_PROT=3306
+MYSQL_USER='root'
+MYSQL_PASSWOED='123456'
