@@ -18,7 +18,7 @@ class A58tongchengSpider(scrapy.Spider):
                 title = title.strip()
             else:
                 title=item.css('.des h2 a::text').extract()
-            data['tltie']=title
+            data['title']=title
 
             try:
                 radd=item.css('.des .add a::text').extract()[-1]

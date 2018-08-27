@@ -19,7 +19,7 @@ class Lagou():
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_ga=GA1.2.1667356220.1534744913; user_trace_token=20180820140128-7a53df3d-a43e-11e8-aa7e-5254005c3644; LGUID=20180820140128-7a53e264-a43e-11e8-aa7e-5254005c3644; LG_LOGIN_USER_ID=d2566edc4444535f8275a2584ffedc82715e3336a9af7a63; showExpriedIndex=1; showExpriedCompanyHome=1; showExpriedMyPublish=1; index_location_city=%E6%9D%AD%E5%B7%9E; hasDeliver=176; _gid=GA1.2.899023627.1535330620; LGSID=20180827084312-2d35639a-a992-11e8-b24a-5254005c3644; PRE_UTM=; PRE_HOST=; PRE_SITE=; PRE_LAND=https%3A%2F%2Fwww.lagou.com%2F; JSESSIONID=ABAAABAAAGGABCBA337480FF494CC18B24A2CD5F7ACA127; Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1535074094,1535160887,1535330620,1535331307; _putrc=BE3CE0C96DF640E3; login=true; unick=%E6%88%9A%E7%9B%88%E5%87%AF; gate_login_token=b5e331caa789b8ba98a82cfe665f46fe8f850df77c275f13; TG-TRACK-CODE=index_search; _gat=1; SEARCH_ID=2c0418d54e5f49b1965e818a8fe2a236; LGRID=20180827091147-2b6ba2ad-a996-11e8-b24a-5254005c3644; Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1535332335',
+            'Cookie': '',
             'Referer': 'https://www.lagou.com/jobs/list_python?labelWords=&fromSearch=true&suginput=',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
@@ -38,23 +38,24 @@ class Lagou():
         try:
             self.browser.get(url)
             if page>1:
+                ypage=self.browser.find_element_by_class_name("pager_is_current").text
+
                 submit=self.wait.until(EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, '.pager_next')))
-                for i in range(page-1):
+                    (By.CSS_SELECTOR, '.next_disabled')))
+                for i in range(page-int(ypage)):
                     submit.click()
                     time.sleep(0.5)
                 self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR,'.pager_is_current'),str(page)))
-        except:
-            print('erorr')
+        except Exception as e:
+            print('erorr',e)
 
-        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.pager_next')))
+        self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.s_position_list ')))
 
         res=pq(self.browser.page_source)
         items=res('.p_top .position_link').items()
         for item in items:
             url=item.attr('href')
             self.joburls.append(url)
-            # print(url)
         
         return self.joburls
     
