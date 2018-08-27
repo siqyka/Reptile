@@ -83,7 +83,7 @@ class Lagou():
 def main():
     url='https://www.lagou.com/jobs/list_python?px=default&city=%E6%9D%AD%E5%B7%9E#filterBox'
     lagou=Lagou(30)
-    db=jobdb.SaveToDatabase(password='tarena')
+    db=jobdb.SaveToDatabase()
     for i in range(1,2):
         lagou.get_first_page(url,i)
 
