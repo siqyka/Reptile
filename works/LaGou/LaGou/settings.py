@@ -64,9 +64,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'LaGou.pipelines.LagouPipeline': 300,
-}
+# ITEM_PIPELINES = {
+#    'LaGou.pipelines.LagouPipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -93,7 +93,7 @@ FEED_EXPORT_ENCODING = 'utf-8'
 
 #查找关键词和工作地点
 KEY='python'
-CITY=''
+CITY='杭州'
 
 #抓取多少页
 MAX_PAGE=3
