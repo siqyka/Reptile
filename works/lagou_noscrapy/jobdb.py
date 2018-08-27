@@ -2,7 +2,7 @@ import pymysql
 
 class SaveToDatabase():
     def __init__(self, host='localhost', port=3306, username='root' ,
-                password='123456',db='work',table='works_jobs',):
+                password='123456',db='work',table='works_jobs',charset='utf8'):
         self.host=host
         self.port=port
         self.username=username
@@ -20,11 +20,11 @@ class SaveToDatabase():
     def set(self,data):
         keys=",".join(data.keys())
         values=",".join(['%s']*len(data))
-        sql="insert into {table} ({keys},{id}) values({values},{vid})".format(table=self.table,keys=keys,values=values,id='id',vid='null')    
+        sql="insert into {table} ({keys},) values({values})".format(table=self.table,keys=keys,values=values)
         try:
             if self.cursor.execute(sql,tuple(data.values())):
                 print('insert success')
                 self.connect.commit()
-        except:
+        except Exception as e:
             print("insert failed")
             self.connect.rollback()
