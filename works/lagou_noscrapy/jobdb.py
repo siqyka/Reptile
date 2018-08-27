@@ -10,10 +10,11 @@ class SaveToDatabase():
         self.db=db
         self.table=table
         self.linkdb()
+        self.charset=charset
 
     def linkdb(self):
         self.connect = pymysql.Connect(host=self.host,port=self.port,
-                    user=self.username,passwd=self.password,db=self.db)
+                    user=self.username,passwd=self.password,db=self.db,charset=self.charset)
         self.cursor = self.connect.cursor()               
 
     #插入数据

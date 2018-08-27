@@ -30,27 +30,33 @@ class Lagou():
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('blink-settings=imagesEnabled=false')#不加载图片
         self.browser=webdriver.Chrome(chrome_options=chrome_options)
+
         # self.browser=webdriver.Chrome()#可视浏览器
+
         self.browser.set_page_load_timeout(self.timeout)
         self.wait=WebDriverWait(self.browser,self.timeout)
 
+    #获取第一级页面，爬取工作源链接
     def get_first_page(self,url,page):
         try:
             self.browser.get(url)
             if page>1:
-                ypage=self.browser.find_element_by_class_name("pager_is_current").text
+                ypage=self.browser.find_element_by_class_name("pager_is_current").text  #获取当前是第几页
 
-                submit=self.wait.until(EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, '.next_disabled')))
+                submit=self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.next_disabled'))) #获取'下一页'按钮
+
+                #点击 要去的页码减当前页码 次数
                 for i in range(page-int(ypage)):
                     submit.click()
                     time.sleep(0.5)
-                self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR,'.pager_is_current'),str(page)))
+                self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR,'.pager_is_current'),str(page)))  #判断是否是要的页面
         except Exception as e:
             print('erorr',e)
 
+        #等待信息页面加载完成
         self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.s_position_list ')))
 
+        #获取链接放入数组，等待调用
         res=pq(self.browser.page_source)
         items=res('.p_top .position_link').items()
         for item in items:
@@ -59,15 +65,18 @@ class Lagou():
         
         return self.joburls
     
+    #获取具体某个工作信息
     def get_jobmsg(self,url):
         try:
-            res=requests.get(url,headers=self.headers)
+            res=requests.get(url,headers=self.headers)  #请求页面
             re=pq(res.text)
-            sadd=re('.work_addr').text().split(' ')[-2]
-            position=re('.job-name .name').text()
-            company=re('#job_company .fl').text().split(' ')[0]
-            salary=re('.job_request span').text().split(' ')[0]
-            claim=",".join(re('.job_request span').text().split(' ')[3::2])
+            sadd=re('.work_addr').text().split(' ')[-2]     #公司地址
+            position=re('.job-name .name').text()           ##职位
+            company=re('#job_company .fl').text().split(' ')[0]     #公司
+            salary=re('.job_request span').text().split(' ')[0]     #工资
+            claim=",".join(re('.job_request span').text().split(' ')[3::2])     #基本要求
+            
+            #形成字典
             dic={
                 'sadd':sadd,
                 'position':position,
