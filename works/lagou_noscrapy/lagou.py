@@ -7,6 +7,7 @@ from pyquery import PyQuery as pq
 import time
 import requests
 import jobdb
+from threading import Thread,Lock
 
 
 class Lagou():
@@ -25,16 +26,18 @@ class Lagou():
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
             }
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('blink-settings=imagesEnabled=false')#不加载图片
-        self.browser=webdriver.Chrome(chrome_options=chrome_options)
+        # chrome_options = webdriver.ChromeOptions()
+        # chrome_options.add_argument('--headless')
+        # chrome_options.add_argument('--disable-gpu')
+        # chrome_options.add_argument('blink-settings=imagesEnabled=false')#不加载图片
+        # self.browser=webdriver.Chrome(chrome_options=chrome_options)
 
-        # self.browser=webdriver.Chrome()#可视浏览器
+        self.browser=webdriver.Chrome()#可视浏览器
 
         self.browser.set_page_load_timeout(self.timeout)
         self.wait=WebDriverWait(self.browser,self.timeout)
+
+        self.db=jobdb.SaveToDatabase()
 
     #获取第一级页面，爬取工作源链接
     def get_first_page(self,url,page):
@@ -85,22 +88,46 @@ class Lagou():
                 'claim':claim,
                 'joburl':url
             }
-            yield dic
-        except:
-            print('msgerorr')
+            # yield dic
 
+            lock.acquire()
+            self.db.set(dic)
+            lock.release()
 
+        except Exception as e:
+            print('msgerorr:',e)
+
+#单线程
+# def main():
+#     url='https://www.lagou.com/jobs/list_python?px=default&city=%E6%9D%AD%E5%B7%9E#filterBox'
+#     lagou=Lagou(30)
+#     db=jobdb.SaveToDatabase()
+#     for i in range(1,2):
+#         lagou.get_first_page(url,i)
+
+#     for x in lagou.joburls:
+#         datas=lagou.get_jobmsg(x)
+#         for data in datas:
+#             db.set(data)
+
+#多线程
+lock=Lock()
 def main():
+    Threadl=[]
+
     url='https://www.lagou.com/jobs/list_python?px=default&city=%E6%9D%AD%E5%B7%9E#filterBox'
     lagou=Lagou(30)
-    db=jobdb.SaveToDatabase()
-    for i in range(1,2):
+
+    for i in range(2,6):
         lagou.get_first_page(url,i)
 
     for x in lagou.joburls:
-        datas=lagou.get_jobmsg(x)
-        for data in datas:
-            db.set(data)
+        t=Thread(target=lagou.get_jobmsg,args=(x,))
+        Threadl.append(t)
+        t.start()
+
+    for t1 in Threadl:
+        t1.join()
 
 if __name__ == '__main__':
     main()

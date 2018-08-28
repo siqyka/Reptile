@@ -9,8 +9,9 @@ class SaveToDatabase():
         self.password=password
         self.db=db
         self.table=table
-        self.linkdb()
         self.charset=charset
+        self.linkdb()
+        
 
     def linkdb(self):
         self.connect = pymysql.Connect(host=self.host,port=self.port,
@@ -21,11 +22,11 @@ class SaveToDatabase():
     def set(self,data):
         keys=",".join(data.keys())
         values=",".join(['%s']*len(data))
-        sql="insert into {table} ({keys},) values({values})".format(table=self.table,keys=keys,values=values)
+        sql="insert into {table} ({keys}) values({values})".format(table=self.table,keys=keys,values=values)
         try:
             if self.cursor.execute(sql,tuple(data.values())):
                 print('insert success')
                 self.connect.commit()
         except Exception as e:
-            print("insert failed")
+            print("insert failed:",e)
             self.connect.rollback()
