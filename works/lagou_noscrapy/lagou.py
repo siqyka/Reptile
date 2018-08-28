@@ -8,7 +8,9 @@ import time
 import requests
 import jobdb
 from threading import Thread,Lock
+from concurrent.futures import ThreadPoolExecutor
 
+lock=Lock()
 
 class Lagou():
     def __init__(self,timeout):
@@ -20,7 +22,7 @@ class Lagou():
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '',
+            'Cookie': 'GA1.2.1667356220.1534744913; user_trace_token=20180820140128-7a53df3d-a43e-11e8-aa7e-5254005c3644; LGUID=20180820140128-7a53e264-a43e-11e8-aa7e-5254005c3644; showExpriedIndex=1; showExpriedCompanyHome=1; showExpriedMyPublish=1; index_location_city=%E6%9D%AD%E5%B7%9E; _gid=GA1.2.899023627.1535330620; SEARCH_ID=d3516a148b5f49968e65dc909afec4ad; hasDeliver=177; JSESSIONID=ABAAABAAAIAACBIE1425982A89C0349B1533E55C2C1F33E; Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1535331307,1535356850,1535357717,1535419465; X_HTTP_TOKEN=4786867dd90f34a2fd0a40327ef7c993; LG_LOGIN_USER_ID=157fd6ceb4cd29a553d69538873124685043dfcdf6eb5dc0; _putrc=BE3CE0C96DF640E3; login=true; unick=%E6%88%9A%E7%9B%88%E5%87%AF; TG-TRACK-CODE=index_deliver; gate_login_token=d50e14cedb88dfb124a282102e80eaffe5f87194692e0b14; LGSID=20180828112105-65f1629f-aa71-11e8-ba95-525400f775ce; PRE_UTM=; PRE_HOST=; PRE_SITE=; PRE_LAND=https%3A%2F%2Fwww.lagou.com%2F; _gat=1; Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1535427570; LGRID=20180828113903-e89599f3-aa73-11e8-b24b-5254005c3644',
             'Referer': 'https://www.lagou.com/jobs/list_python?labelWords=&fromSearch=true&suginput=',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
@@ -111,23 +113,36 @@ class Lagou():
 #             db.set(data)
 
 #多线程
-lock=Lock()
-def main():
-    Threadl=[]
+# def main():
+#     Threadl=[]
 
+#     url='https://www.lagou.com/jobs/list_python?px=default&city=%E6%9D%AD%E5%B7%9E#filterBox'
+#     lagou=Lagou(30)
+
+#     for i in range(2,6):
+#         lagou.get_first_page(url,i)
+
+#     for x in lagou.joburls:
+#         t=Thread(target=lagou.get_jobmsg,args=(x,))
+#         Threadl.append(t)
+#         t.start()
+
+#     for t1 in Threadl:
+#         t1.join()
+
+
+#线程池
+def main():
     url='https://www.lagou.com/jobs/list_python?px=default&city=%E6%9D%AD%E5%B7%9E#filterBox'
     lagou=Lagou(30)
 
-    for i in range(2,6):
+    for i in range(1,2):
         lagou.get_first_page(url,i)
 
-    for x in lagou.joburls:
-        t=Thread(target=lagou.get_jobmsg,args=(x,))
-        Threadl.append(t)
-        t.start()
+    with ThreadPoolExecutor(3) as executor:
+        executor.map(lagou.get_jobmsg,lagou.joburls)
 
-    for t1 in Threadl:
-        t1.join()
+
 
 if __name__ == '__main__':
     main()
