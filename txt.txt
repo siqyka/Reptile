@@ -125,7 +125,4 @@ choice()-->随机挑选参数内容
 发起请求-->获取响应内容-->解析内容-->保存数据
 
 
-
-
-
-https://ss.freess.org/#portfolio-preview
+scrapy爬取流程
