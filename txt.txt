@@ -1,15 +1,131 @@
-闭包
-装饰器
-字符统计
-数据库内外连接
+闭包:
+闭包是由函数及其相关的引用环境组合而成的实体(即：闭包=函数+引用环境)
+def addx(x):  
+    def addy(y): 
+        return x + y  
+    return addy
+
+func=addx(10)
+func(10)
+--->20
+
+
+装饰器:
+装饰器模式（Decorator Pattern）允许向一个现有的对象添加新的功能，同时又不改变其结构
+函数+实参高阶函数+返回值高阶函数+嵌套函数+语法糖 = 装饰器
+def f1(func):
+    def f2(*args, **kwargs):
+        print('装饰器')
+        func(*args, **kwargs)
+    return f2
+
+@f1
+def f3(x):
+    print('函数')
+    print(x)
+
+f3(x=3)
+
+
+字符统计:
+islower,isupper
+
+
+数据库内外连接:
+内连接：只展示相连两表匹配内容
+左连接：左表展示所有内容，右表展示符合条件内容，其他则展示null
+右链接：与左连接相反
+
+
 线程、进程、GIL
-三层握手
+
+
+
+三次握手
+c  --SYN-->  s
+s  --SYN+ACK-->  c
+c  --ACK-->  s
+
+
 深拷贝、浅拷贝
+浅：只是对对象的引用
+深：对对象的复制
+
+
 排序算法
+冒泡：
+r=[5,3,2,7,4,9]
+def swap(i, j):
+    r[i],r[j]=r[j],r[i]
+
+def bubble_sort_simple():
+    lis =r
+    length = len(r)
+    for i in range(length):
+        for j in range(i+1, length):
+            if lis[i] > lis[j]:
+                swap(i, j)
+
+bubble_sort_simple()
+print(r)
+
+快速：
+def quicksort(lists,left,right):
+    if left >= right:
+        return lists
+    key = lists[left]
+    low = left
+    high = right
+    while left < right:
+        while left < right and lists[right] >= key:
+            right -= 1
+        lists[left] = lists[right]
+        while left < right and lists[left] <= key:
+            left += 1
+        lists[right] = lists[left]
+    lists[right] = key
+    quicksort(lists,low,left-1)
+    quicksort(lists,left+1,high)
+    return lists
+ 
+def main():
+    lists = [11,23,5,2,44,88,42]
+    length = len(lists)-1
+    quicksort(lists,0,length)
+    print (lists)
+ 
+
+
 二分查找
+
+
+
 二叉树
-删除重复元素
-match（）和search（）区别
+
+
+
+删除重复元素：
+x=set(list)
+x=list(x)
+
+
+
+match（）和search（）区别：
+math需要开头即匹配上，否则返货none
+search则或匹配玩全部字符串
+
+
 random模块
+randint(s,e)-->[s,e]整数
+random()-->[0,2)浮点
+choice()-->随机挑选参数内容
+
+
 爬虫对网页解析的基本流程
-rest api接口？
+发起请求-->获取响应内容-->解析内容-->保存数据
+
+
+
+
+
+https://ss.freess.org/#portfolio-preview
