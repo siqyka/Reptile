@@ -37,10 +37,6 @@ islower,isupper
 右链接：与左连接相反
 
 
-线程、进程、GIL
-
-
-
 三次握手
 c  --SYN-->  s
 s  --SYN+ACK-->  c
@@ -96,18 +92,9 @@ def main():
  
 
 
-二分查找
-
-
-
-二叉树
-
-
-
 删除重复元素：
 x=set(list)
 x=list(x)
-
 
 
 match（）和search（）区别：
@@ -121,10 +108,23 @@ random()-->[0,2)浮点
 choice()-->随机挑选参数内容
 
 
-爬虫对网页解析的基本流程
+线程、进程、GIL
+
+
+二分查找
+
+
+
+二叉树
+
+
+
+爬虫对网页解析的基本流程：
 发起请求-->获取响应内容-->解析内容-->保存数据
 
 
-
-
+scrapy工作流程：
+engine通过调度器用request形式给downloader下载
+下载完成后，engine发送给spider处理
+处理得到item和新的request，将item发送给item pipeline，将request给调度器
 
