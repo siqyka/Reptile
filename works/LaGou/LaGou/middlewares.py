@@ -94,9 +94,10 @@ class SeleniumMiddleware(object):
             self.browser.get(request.url)
             time.sleep(5)
             if page>1:
+                ypage=self.browser.find_element_by_class_name("pager_is_current").text  #获取当前是第几页
                 submit=self.wait.until(EC.presence_of_element_located(
                     (By.CSS_SELECTOR, '.next_disabled')))
-                for i in range(page-1):
+                for i in range(page-int(ypage)):
                     submit.click()
                     time.sleep(0.5)
                 self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR,'.pager_is_current'),str(page)))
