@@ -11,6 +11,7 @@ import scrapy
 class RenthouseItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    collection=table='houses'
     title=scrapy.Field()
     rurl=scrapy.Field()
     radd=scrapy.Field()
