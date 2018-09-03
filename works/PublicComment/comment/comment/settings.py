@@ -89,9 +89,9 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MAX_PAGE=3
+MAX_PAGE=3  #爬取的页数
 
-CITY='hangzhou'
+CITY='' #城市拼音 如beijing、shanghai
 
 FEED_EXPORT_ENCODING = 'utf-8'
 
@@ -99,4 +99,4 @@ MYSQL_HOST='localhost'
 MYSQL_DATABASE='work'
 MYSQL_PROT=3306
 MYSQL_USER='root'
-MYSQL_PASSWOED='tarena'
+MYSQL_PASSWOED=''
