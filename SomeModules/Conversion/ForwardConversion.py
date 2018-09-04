@@ -11,7 +11,7 @@ class ServerError(Exception):
      def __str__(self):
          return repr(self.value)
 
-class Conversion():
+class ForwardConversion():
     '''
     key为高德地图api的key
     '''
@@ -41,6 +41,6 @@ class Conversion():
 
 
 if __name__ == '__main__':
-    addr=Conversion(key='168b99f6d53264cf074ec1eccbe943c0',city='')
-    msg=addr.conversion(addr='火炬大厦')
+    addr=ForwardConversion(key='',city='')
+    msg=addr.conversion(addr='')
     print(msg)
